@@ -1,2 +1,0 @@
-add administrator/sync_to_all
-add add to employee attendance when registering
