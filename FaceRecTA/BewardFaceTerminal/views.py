@@ -14,7 +14,7 @@ from PIL import Image
 import cv2
 import numpy as np
 from timeAttendance.models import StrangerDetails
-from guestmanagementapp.models import GuestDetails, GuestAttendance
+from guestmanagementapp.models import GuestDetails, GuestAttendance, GuestBlacklist
 
 sql_create_projects_table = """ CREATE TABLE IF NOT EXISTS attendence (
                                         id integer,
