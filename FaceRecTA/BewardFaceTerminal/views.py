@@ -111,6 +111,7 @@ def index2(request):
     a = data['info']
     response_data = {}
     response_data['info'] = a
+    print(response_data['info'])
     print()
     print('PERSON ID = ' + str(response_data['info']['PersonID']))
     print('CUSTOMIZE ID = ' + str(response_data['info']['CustomizeID']))
@@ -131,6 +132,7 @@ def index2(request):
         guest_attendance.GuestDetails_id        = int(response_data['info']['IdCard'])
         guest_attendance.temperature            = str(response_data['info']['Temperature'])
         guest_attendance.save()
+        print("guest_saved")
     except Exception as e:
         print(e)
         conn = create_connection(r"db.sqlite3")

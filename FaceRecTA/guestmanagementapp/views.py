@@ -406,6 +406,7 @@ def register_guest_proc_home(requests):
 
                 try:#check post data can be assigned to object & calculate validity date
                     guest = GuestDetails()
+                    guest.id            = int(nric)
                     guest.name          = name
                     guest.image_name    = image_name
                     guest.phone_number  = phone
@@ -490,7 +491,7 @@ def register_guest_proc_home(requests):
                         raise e
 
                     try:#Check that object can be cleanly saved
-                        #guest.save()
+                        guest.save()
                         messages.success(requests, 'Succesfully registered guest, The guest visit will expire on : ' + expired_date_time.strftime('%d-%m-%Y  %I:%M %p'))
                         try:#check that attendance can be generated based on image snapshpo
                             guest2 = GuestDetails.objects.get(nric = int(nric))
@@ -503,7 +504,7 @@ def register_guest_proc_home(requests):
                             attendance.capture_time = capture_date_time.strftime('%Y-%m-%dT%H:%M:%S')
                             attendance.capture_location_id = int(capture_location_id)
                             attendance.GuestDetails_id = guest2.id
-                            #attendance.save()
+                            attendance.save()
                             messages.success(requests, 'Succesfully created attendance for registered guest')
                         except Exception as e:
                             print(e)
