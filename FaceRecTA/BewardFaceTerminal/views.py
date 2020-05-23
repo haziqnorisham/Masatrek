@@ -125,7 +125,7 @@ def index2(request):
         response_data['info']['Temperature'] = 0.00
     print()
     try:
-        if(response_data['info']['VerifyStatus'] == 2)
+        if(response_data['info']['VerifyStatus'] == 2):
             guest = GuestBlacklist.objects.get(nric=int(response_data['info']['IdCard']))
             guest_attendance = GuestAttendance()
             guest_attendance.capture_time           = str(response_data['info']['CreateTime'])
