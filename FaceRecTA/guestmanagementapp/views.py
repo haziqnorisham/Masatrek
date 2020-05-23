@@ -11,7 +11,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.forms.models import model_to_dict
 from timeAttendance.models import TerminalDetails, StrangerDetails
-from guestmanagementapp.models import GuestDetails, GuestAttendance
+from guestmanagementapp.models import GuestDetails, GuestAttendance, GuestBlacklist
 from django.contrib.auth.decorators import login_required
 
 def check_all_terminal_connection():
@@ -364,24 +364,48 @@ def ajax_check_new_stranger(requests):
     try:
         id_from_dom = requests.GET["current_stranger_id"]
         latest_stranger = StrangerDetails.objects.all().order_by("-id")[0]
-        #latest_stranger = model_to_dict(latest_stranger)
-        #print(latest_stranger)
+        latest_blacklist = GuestBlacklist.objects.all().order_by("-id")[0]
 
-        if(int(latest_stranger.id) > int(id_from_dom)):
-            data = {
-                'new_user' : 1,
-                'user_id' : int(latest_stranger.id),
-                'capture_time' : latest_stranger.capture_time,
-                'temperature' : latest_stranger.temperature,
-                'image_name' : latest_stranger.image_name,
-                'capture_location_id' : latest_stranger.capture_location.terminal_id,
-                'capture_location_name' : latest_stranger.capture_location.terminal_name,
-            }
+        latest_stranger_datetime = datetime.strptime(latest_stranger.capture_time, '%Y-%m-%dT%H:%M:%S')
+        latest_blacklist_datetime = datetime.strptime(latest_blacklist.capture_time, '%Y-%m-%dT%H:%M:%S')
+
+        if(latest_blacklist_datetime > latest_stranger_datetime):
+            if(int(latest_blacklist.id) != int(id_from_dom)):
+                data = {
+                    'type' : 0,
+                    'new_user' : 1,
+                    'user_id' : int(latest_blacklist.id),
+                    'user_name' : latest_blacklist.GuestDetails.name,
+                    'user_nric' : latest_blacklist.GuestDetails.nric,
+                    'user_phone': latest_blacklist.GuestDetails.phone_number,
+                    'capture_time' : latest_blacklist.capture_time,
+                    'temperature' : latest_blacklist.temperature,
+                    'image_name' : latest_blacklist.GuestDetails.image_name,
+                    'capture_location_id' : latest_blacklist.capture_location.terminal_id,
+                    'capture_location_name' : latest_blacklist.capture_location.terminal_name,
+                }
+            else:
+                data = {
+                    'new_user' : 0,
+                    'user_id' : int(latest_stranger.id)
+                }
         else:
-            data = {
-                'new_user' : 0,
-                'user_id' : int(latest_stranger.id)
-            }
+            if(int(latest_stranger.id) != int(id_from_dom)):
+                data = {
+                    'type' : 1,
+                    'new_user' : 1,
+                    'user_id' : int(latest_stranger.id),
+                    'capture_time' : latest_stranger.capture_time,
+                    'temperature' : latest_stranger.temperature,
+                    'image_name' : latest_stranger.image_name,
+                    'capture_location_id' : latest_stranger.capture_location.terminal_id,
+                    'capture_location_name' : latest_stranger.capture_location.terminal_name,
+                }
+            else:
+                data = {
+                    'new_user' : 0,
+                    'user_id' : int(latest_stranger.id)
+                }
     except Exception as e:
         print(e)
     return JsonResponse(data)

@@ -126,8 +126,8 @@ def index2(request):
     print()
     try:
         if(response_data['info']['VerifyStatus'] == 2):
-            guest = GuestBlacklist.objects.get(nric=int(response_data['info']['IdCard']))
-            guest_attendance = GuestAttendance()
+            guest = GuestDetails.objects.get(nric=int(response_data['info']['IdCard']))
+            guest_attendance = GuestBlacklist()
             guest_attendance.capture_time           = str(response_data['info']['CreateTime'])
             guest_attendance.capture_location_id    = int(response_data['info']['DeviceID'])
             guest_attendance.GuestDetails_id        = int(response_data['info']['IdCard'])
