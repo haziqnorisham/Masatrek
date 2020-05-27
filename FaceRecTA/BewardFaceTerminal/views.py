@@ -14,7 +14,7 @@ from PIL import Image
 import cv2
 import numpy as np
 from timeAttendance.models import StrangerDetails
-from guestmanagementapp.models import GuestDetails, GuestAttendance, GuestBlacklist
+from guestmanagementapp.models import GuestDetails, GuestAttendance
 
 sql_create_projects_table = """ CREATE TABLE IF NOT EXISTS attendence (
                                         id integer,
@@ -111,7 +111,6 @@ def index2(request):
     a = data['info']
     response_data = {}
     response_data['info'] = a
-    print(response_data['info'])
     print()
     print('PERSON ID = ' + str(response_data['info']['PersonID']))
     print('CUSTOMIZE ID = ' + str(response_data['info']['CustomizeID']))
@@ -125,24 +124,13 @@ def index2(request):
         response_data['info']['Temperature'] = 0.00
     print()
     try:
-        if(response_data['info']['VerifyStatus'] == 2):
-            guest = GuestDetails.objects.get(nric=int(response_data['info']['IdCard']))
-            guest_attendance = GuestBlacklist()
-            guest_attendance.capture_time           = str(response_data['info']['CreateTime'])
-            guest_attendance.capture_location_id    = int(response_data['info']['DeviceID'])
-            guest_attendance.GuestDetails_id        = int(response_data['info']['IdCard'])
-            guest_attendance.temperature            = str(response_data['info']['Temperature'])
-            guest_attendance.save()
-            print("guest_saved")
-        else:
-            guest = GuestDetails.objects.get(nric=int(response_data['info']['IdCard']))
-            guest_attendance = GuestAttendance()
-            guest_attendance.capture_time           = str(response_data['info']['CreateTime'])
-            guest_attendance.capture_location_id    = int(response_data['info']['DeviceID'])
-            guest_attendance.GuestDetails_id        = int(response_data['info']['IdCard'])
-            guest_attendance.temperature            = str(response_data['info']['Temperature'])
-            guest_attendance.save()
-            print("guest_saved")
+        guest = GuestDetails.objects.get(nric=int(response_data['info']['IdCard']))
+        guest_attendance = GuestAttendance()
+        guest_attendance.capture_time           = str(response_data['info']['CreateTime'])
+        guest_attendance.capture_location_id    = int(response_data['info']['DeviceID'])
+        guest_attendance.GuestDetails_id        = int(response_data['info']['IdCard'])
+        guest_attendance.temperature            = str(response_data['info']['Temperature'])
+        guest_attendance.save()
     except Exception as e:
         print(e)
         conn = create_connection(r"db.sqlite3")
