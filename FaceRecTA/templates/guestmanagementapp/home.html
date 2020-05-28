@@ -128,6 +128,79 @@
   <br>
   <div class="container shadow rounded p-3">
     <div class="row">
+      <div class="col border-botton">
+        <p class="h4 text-center"><strong>Last 3 Visitors of the day</strong></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <img class="shadow rounded mx-auto" width="142" height="157" src="" alt="myimg" id="img1" name="modal_image2">
+          </div>
+          <div class="col">
+            <div class="row">
+              <p><strong>Capture Time</strong></p>
+            </div>
+            <div class="row">
+              <p id="time1"></p>
+            </div>
+            <div class="row">
+              <p><strong>Temperature</strong></p>
+            </div>
+            <div class="row">
+              <p id="temperature1"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <img class="shadow rounded mx-auto" width="142" height="157" src="" alt="myimg" id="img2" name="modal_image2">
+          </div>
+          <div class="col">
+            <div class="row">
+              <p><strong>Capture Time</strong></p>
+            </div>
+            <div class="row">
+              <p id="time2"></p>
+            </div>
+            <div class="row">
+              <p><strong>Temperature</strong></p>
+            </div>
+            <div class="row">
+              <p id="temperature2"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <img class="shadow rounded mx-auto" width="142" height="157" src="" alt="myimg" id="img3" name="modal_image2">
+          </div>
+          <div class="col">
+            <div class="row">
+              <p><strong>Capture Time</strong></p>
+            </div>
+            <div class="row">
+              <p id="time3"></p>
+            </div>
+            <div class="row">
+              <p><strong>Temperature</strong></p>
+            </div>
+            <div class="row">
+              <p id="temperature3"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="container shadow rounded p-3">
+    <div class="row">
       <div class="col border-bottom">
         <p class="h4 text-center"><strong>Connected Terminal</strong></p>
       </div>
@@ -353,6 +426,10 @@
       var dd = String(today.getDate()).padStart(2, '0');
       var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
       var yyyy = today.getFullYear();
+
+      document.getElementById("img1").style.display = 'none'
+      document.getElementById("img2").style.display = 'none'
+      document.getElementById("img3").style.display = 'none'
 
       today = dd + '-' + mm + '-' + yyyy;
       document.getElementById("date_display").innerHTML = today;
