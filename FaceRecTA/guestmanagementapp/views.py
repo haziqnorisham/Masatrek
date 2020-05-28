@@ -140,10 +140,15 @@ def guest_list(requests):
 @login_required
 def guest_list_proc(requests):
     if requests.method == 'POST':
-        try:
-            guest = GuestDetails.objects.get(id=int(requests.POST["guest_id"]))
-            guest.status = 1
-            guest.save()
+        try:#check all terminal is connected
+            check_all_terminal_connection()
+            try:#check if guest is present in database
+                guest = GuestDetails.objects.get(id=int(requests.POST["guest_id"]))
+                guest.status = 0
+                guest.save()
+            except Exception as e:
+                print(e)
+                messages.error(requests, "User does not exist in database. contact administrator!")
 
             GuestAttendance.objects.filter(GuestDetails_id = int(requests.POST["guest_id"])).delete
             terminal_objects = TerminalDetails.objects.all()
@@ -181,10 +186,15 @@ def guest_list_proc(requests):
                     except Exception as e:
                         print(e)
                         messages.error(requests, e)
+            try:
+                guest.delete()
+            except Exception as e:
+                print(e)
+                messages.error(requests, "Unable to delete guest from database, contact administrator!")
 
         except Exception as e:
             print(e)
-            messages.error(requests, e)
+            messages.error(requests, "One or more terminal cannot be reached. Please ensure all terminal is connected!")
 
     response = redirect('/guestmanagement/guestlist/')
     return response
@@ -366,6 +376,7 @@ def ajax_check_new_stranger(requests):
         latest_stranger = StrangerDetails.objects.all().order_by("-id")[0]
         latest_blacklist = GuestBlacklist.objects.all().order_by("-id")[0]
 
+
         latest_stranger_datetime = datetime.strptime(latest_stranger.capture_time, '%Y-%m-%dT%H:%M:%S')
         latest_blacklist_datetime = datetime.strptime(latest_blacklist.capture_time, '%Y-%m-%dT%H:%M:%S')
 
@@ -406,9 +417,10 @@ def ajax_check_new_stranger(requests):
                     'new_user' : 0,
                     'user_id' : int(latest_stranger.id)
                 }
+        return JsonResponse(data)
     except Exception as e:
         print(e)
-    return JsonResponse(data)
+
 
 def register_guest_proc_home(requests):
 
