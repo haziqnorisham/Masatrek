@@ -136,20 +136,20 @@
       <div class="col">
         <div class="row">
           <div class="col">
-            <img class="shadow rounded mx-auto" width="142" height="157" src="" alt="myimg" id="img1" name="modal_image2">
+            <img class="shadow rounded mx-auto" width="142" height="157" src="/static/{{latest_strangers.0.image_name}}" alt="myimg" id="img1" name="modal_image2">
           </div>
           <div class="col">
             <div class="row">
               <p><strong>Capture Time</strong></p>
             </div>
             <div class="row">
-              <p id="time1"></p>
+              <p id="time1">{{latest_strangers.0.capture_time}}</p>
             </div>
             <div class="row">
               <p><strong>Temperature</strong></p>
             </div>
             <div class="row">
-              <p id="temperature1"></p>
+              <p id="temperature1">{{latest_strangers.0.temperature}}</p>
             </div>
           </div>
         </div>
@@ -157,20 +157,20 @@
       <div class="col">
         <div class="row">
           <div class="col">
-            <img class="shadow rounded mx-auto" width="142" height="157" src="" alt="myimg" id="img2" name="modal_image2">
+            <img class="shadow rounded mx-auto" width="142" height="157" src="/static/{{latest_strangers.1.image_name}}" alt="myimg" id="img2" name="modal_image2">
           </div>
           <div class="col">
             <div class="row">
               <p><strong>Capture Time</strong></p>
             </div>
             <div class="row">
-              <p id="time2"></p>
+              <p id="time2">{{latest_strangers.1.capture_time}}</p>
             </div>
             <div class="row">
               <p><strong>Temperature</strong></p>
             </div>
             <div class="row">
-              <p id="temperature2"></p>
+              <p id="temperature2">{{latest_strangers.1.temperature}}</p>
             </div>
           </div>
         </div>
@@ -178,20 +178,20 @@
       <div class="col">
         <div class="row">
           <div class="col">
-            <img class="shadow rounded mx-auto" width="142" height="157" src="" alt="myimg" id="img3" name="modal_image2">
+            <img class="shadow rounded mx-auto" width="142" height="157" src="/static/{{latest_strangers.2.image_name}}" alt="myimg" id="img3" name="modal_image2">
           </div>
           <div class="col">
             <div class="row">
               <p><strong>Capture Time</strong></p>
             </div>
             <div class="row">
-              <p id="time3"></p>
+              <p id="time3">{{latest_strangers.2.capture_time}}</p>
             </div>
             <div class="row">
               <p><strong>Temperature</strong></p>
             </div>
             <div class="row">
-              <p id="temperature3"></p>
+              <p id="temperature3">{{latest_strangers.2.temperature}}</p>
             </div>
           </div>
         </div>
@@ -427,10 +427,17 @@
       var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
       var yyyy = today.getFullYear();
 
-      document.getElementById("img1").style.display = 'none'
-      document.getElementById("img2").style.display = 'none'
-      document.getElementById("img3").style.display = 'none'
+      str1 = document.getElementById("img1").src
+      str2 = document.getElementById("img2").src
+      str3 = document.getElementById("img3").src
 
+      if(str1.substr(str1.length - 3) != "jpg")
+        document.getElementById("img1").style.display = "none"
+      if(str2.substr(str2.length - 3) != "jpg")
+        document.getElementById("img2").style.display = "none"
+      if(str3.substr(str3.length - 3) != "jpg")
+        document.getElementById("img3").style.display = "none"
+        
       today = dd + '-' + mm + '-' + yyyy;
       document.getElementById("date_display").innerHTML = today;
     }

@@ -41,6 +41,14 @@ def home(requests):
     terminal_details_list_dict = []
 
     terminal_details_model = TerminalDetails.objects.all()
+    try:
+        sranger_list_3_dict = []
+        stranger_list_3 = StrangerDetails.objects.all().order_by("-id")
+        for strng in stranger_list_3:
+            sranger_list_3_dict.append(model_to_dict(strng))
+    except Exception as e:
+        print(e)
+
 
     latest_stranger_id = StrangerDetails.objects.all().order_by("-id")[0]
     latest_stranger_id = model_to_dict(latest_stranger_id)
@@ -50,7 +58,10 @@ def home(requests):
         if model_to_dict(terminal_detail_model)["terminal_id"] != 0:
             terminal_details_list_dict.append(model_to_dict(terminal_detail_model))
 
+
+
     context= {
+        "latest_strangers" : sranger_list_3_dict,
         "terminal_details" : terminal_details_list_dict,
         "latest_stranger_id" : latest_stranger_id
         }
