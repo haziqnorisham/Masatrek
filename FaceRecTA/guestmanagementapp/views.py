@@ -46,27 +46,30 @@ def home(requests):
         stranger_list_3 = StrangerDetails.objects.all().order_by("-id")
         for strng in stranger_list_3:
             sranger_list_3_dict.append(model_to_dict(strng))
+
+
+
+        latest_stranger_id = StrangerDetails.objects.all().order_by("-id")[0]
+        latest_stranger_id = model_to_dict(latest_stranger_id)
+        print(latest_stranger_id)
+
+        for i, terminal_detail_model in enumerate(terminal_details_model):
+            if model_to_dict(terminal_detail_model)["terminal_id"] != 0:
+                terminal_details_list_dict.append(model_to_dict(terminal_detail_model))
+
+
+
+        context= {
+            "latest_strangers" : sranger_list_3_dict,
+            "terminal_details" : terminal_details_list_dict,
+            "latest_stranger_id" : latest_stranger_id
+            }
+        return render(requests, "guestmanagementapp/home.html", context)
     except Exception as e:
+        return render(requests, "guestmanagementapp/home.html")
         print(e)
 
 
-    latest_stranger_id = StrangerDetails.objects.all().order_by("-id")[0]
-    latest_stranger_id = model_to_dict(latest_stranger_id)
-    print(latest_stranger_id)
-
-    for i, terminal_detail_model in enumerate(terminal_details_model):
-        if model_to_dict(terminal_detail_model)["terminal_id"] != 0:
-            terminal_details_list_dict.append(model_to_dict(terminal_detail_model))
-
-
-
-    context= {
-        "latest_strangers" : sranger_list_3_dict,
-        "terminal_details" : terminal_details_list_dict,
-        "latest_stranger_id" : latest_stranger_id
-        }
-
-    return render(requests, "guestmanagementapp/home.html", context)
 
 @login_required
 def register_guest(requests):
@@ -430,7 +433,25 @@ def ajax_check_new_stranger(requests):
                 }
         return JsonResponse(data)
     except Exception as e:
+        if(int(latest_stranger.id) != int(id_from_dom)):
+            data = {
+                'type' : 1,
+                'new_user' : 1,
+                'user_id' : int(latest_stranger.id),
+                'capture_time' : latest_stranger.capture_time,
+                'temperature' : latest_stranger.temperature,
+                'image_name' : latest_stranger.image_name,
+                'capture_location_id' : latest_stranger.capture_location.terminal_id,
+                'capture_location_name' : latest_stranger.capture_location.terminal_name,
+            }
+        else:
+            data = {
+                'new_user' : 0,
+                'user_id' : int(latest_stranger.id)
+            }
         print(e)
+        return JsonResponse(data)
+
 
 
 def register_guest_proc_home(requests):
