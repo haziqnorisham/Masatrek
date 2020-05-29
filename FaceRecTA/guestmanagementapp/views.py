@@ -105,21 +105,97 @@ def register_guest_proc(requests):
             messages.error(requests, 'No image selected, guest not registered')
         else:
             guest = GuestDetails()
-            try:
-                guest.id               = int(requests.POST["nric"])
-                guest.name             = requests.POST["name"]
-                guest.image_name       = requests.POST["image_name"]
-                guest.phone_number     = int(requests.POST["phone"])
-                guest.nric             = int(requests.POST["nric"])
-                guest.comment          = requests.POST["comment"]
-                guest.status           = 0
-            except:
-                messages.error(requests, 'Make sure input is correct, guest not registered')
-            try:
-                guest.save()
-                messages.success(requests, 'Guest succesfully registered')
-            except:
-                messages.error(requests, 'Failed saving to database, guest not registered')
+            try:#Try connecting to all terminal.
+                #Ensure all terminal can be reached to avoid mismatch database of masatrek and device's database.
+                try:
+                    check_all_terminal_connection()
+                except Exception as e:
+                    raise SystemError('One or more terminal failed connect, Please ensure all terminal is connected!')
+
+                try:
+                    guest.id               = int(requests.POST["nric"])
+                    guest.name             = requests.POST["name"]
+                    guest.image_name       = requests.POST["image_name"]
+                    guest.phone_number     = int(requests.POST["phone"])
+                    guest.nric             = int(requests.POST["nric"])
+                    guest.comment          = requests.POST["comment"]
+                    guest.status           = 0
+                except:
+                    raise ValueError('Please ensure all the input is corect!')
+
+                try:#try registering into terminal
+                    terminal_details_object_list = TerminalDetails.objects.all()
+
+                    has_error = 0
+                    for terminal_details_object in terminal_details_object_list:
+                        if( terminal_details_object.terminal_id != 0 ):
+
+                            image_name = guest.image_name
+                            with open("static/"+image_name, "rb") as image_file:
+                                encoded_string = base64.b64encode(image_file.read())
+
+                            picjson = "data:image/jpeg;base64,"+encoded_string.decode("utf-8")
+
+
+                            url = "http://"+terminal_details_object.terminal_ip+"/action/AddPerson"
+
+                            headers = {
+                                'Content-Type': "application/json",
+                                'User-Agent': "PostmanRuntime/7.16.3",
+                                'Accept': "*/*",
+                                'Cache-Control': "no-cache",
+                                'Postman-Token': "299fa413-9e09-4776-ab1d-5dae8c1ad2e7,95df307a-1643-4b35-b8fd-db3ed2e78a60",
+                                'Host': terminal_details_object.terminal_ip,
+                                'Accept-Encoding': "gzip, deflate",
+                                'Content-Length': "",
+                                'Connection': "keep-alive",
+                                'cache-control': "no-cache"
+                                }
+
+                            body = {
+                                    "operator": "AddPerson",
+                                    "info": {
+                                        "DeviceID":int(terminal_details_object.terminal_id),
+                                        "IdType":0,
+                                        "PersonType": 0,
+                                        "Name":str(guest.name),
+                                        "Gender":0,
+                                        "CardType":0,
+                                        "IdCard":str(guest.nric),
+                                        "CustomizeID":guest.nric,
+                                        "Native": "",
+                                        #"Tempvalid": 1,
+                                        "Tempvalid": 0,
+                                        #"ValidEnd ": expired_date_time.strftime('%Y-%m-%dT%H:%M:%S'),
+                                        " ChannelAuthority0":"1",
+                                        " ChannelAuthority1":"1",
+                                        " ChannelAuthority2":"1",
+                                        " ChannelAuthority3":"1"
+                                      },
+                                        "picinfo": picjson
+                                    }
+
+                            response = requests_import.request("POST", url, headers=headers, auth=HTTPBasicAuth("admin", "admin"), json=body)
+                            json_data = response.text
+                            data = json.loads(json_data)
+                            print(data['info']['Result'])
+                            if(data['info']['Result'] == "Fail"):
+                                print("entered Exception")
+                                messages.error(requests, "From Terminal : " + str(terminal_details_object.terminal_name) + " Message : " +data['info']['Detail'])
+                                has_error = 1
+                except Exception as e:
+                    raise SystemError('Failed registering the guest into the terminal. Contact administrator!')
+
+                try:
+                    guest.save()
+                    messages.success(requests, 'Guest succesfully registered')
+                except:
+                    raise SystemError('Failed to save the guest to masatrek database. Contact administrotor!')
+
+            except Exception as e:
+                print(e)
+                messages.error(requests, str(type(e)) +"    "+ str(e))
+
 
     response = redirect('/guestmanagement/registerguest/')
     return response
