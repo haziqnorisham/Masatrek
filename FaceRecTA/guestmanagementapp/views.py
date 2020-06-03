@@ -315,6 +315,8 @@ def guest_attendance(requests):
         try:
             guest_dict = {
                         "name": earliest_capture.GuestDetails.name,
+                        "nric": earliest_capture.GuestDetails.nric,
+                        "img_name": earliest_capture.GuestDetails.image_name,
                         "enter_time": earliest_capture.capture_time,
                         "enter_location": earliest_capture.capture_location.terminal_name,
                         "enter_temperature": earliest_capture.temperature,
