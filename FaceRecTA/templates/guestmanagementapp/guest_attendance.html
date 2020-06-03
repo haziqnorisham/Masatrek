@@ -33,15 +33,15 @@
     <div class="row">
       <div class="col text-center">        
         <label for="date_selector">Name: </label>        
-        <input type="text" class="form-control" id="name_filter"  placeholder="Guest Name">                     
+        <input type="text" class="form-control" id="name_filter"  onkeyup="search_function()" placeholder="Guest Name">                     
       </div>
       <div class="col text-center">
         <label for="date_selector">NRIC: </label>        
-        <input type="text" class="form-control" id="name_filter"  placeholder="NRIC">
+        <input type="text" class="form-control" id="nric_filter" onkeyup="search_function()" placeholder="NRIC">
       </div>      
       <div class="col text-center">
-        <label for="date_selector">Capture Location: </label>        
-        <input type="text" class="form-control" id="name_filter"  placeholder="Capture Location">
+        <label for="date_selector">Enter Temperature: </label>        
+        <input class="form-control" id="temperature_filter"  type="number" id="temperature_field" step="0.1" min="0" onkeyup="temperature_function()" placeholder="Enter temperature">
       </div>
     </div>
     <br>
@@ -95,9 +95,10 @@
     {% endif %}
     <div class="row">
       <div class="col">
-        <table class="table">
+        <table class="table" id="guest_list_table">
           <thead class="thead-dark">
             <tr>
+              <th scope="col">Image</th>
               <th scope="col">Name</th>
               <th scope="col">NRIC</th>
               <th scope="col">Capture Time</th>
@@ -107,6 +108,7 @@
           <tbody>
             {% for guest in guest_attendance_list %}
             <tr>
+              <td><img class="shadow rounded img-thumbnail" width="142" height="157" src="{% static guest.img_name %}" alt="myimg"></td>
               <td>{{guest.name}}</td>
               <td>{{guest.nric}}</td>
               <td>{{guest.enter_time}}</td>
@@ -125,4 +127,54 @@
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<script>
+  function search_function() {
+    // Declare variables
+    var input, filter, ul, li, a, i, txtValue, row_list;
+    input = document.getElementById('name_filter');
+    nric_input = document.getElementById('nric_filter'); 
+
+    filter = input.value.toUpperCase();
+    nric_filter = nric_input.value;
+
+    row_list = document.getElementById('guest_list_table').rows;
+
+    for (i = 1; i < document.getElementById('guest_list_table').rows.length; i++) {
+      document.getElementById('guest_list_table').rows[i].style.display = "";
+    }      
+
+    for (i = 1; i < document.getElementById('guest_list_table').rows.length; i++) {      
+      txtValue = document.getElementById('guest_list_table').rows[i].cells[1].innerHTML;
+      nric_txtValue = document.getElementById('guest_list_table').rows[i].cells[2].innerHTML;      
+      if (txtValue.toUpperCase().indexOf(filter) > -1 && nric_txtValue.indexOf(String(nric_filter)) > -1) {              
+        document.getElementById('guest_list_table').rows[i].style.display = "";
+      } else {
+        document.getElementById('guest_list_table').rows[i].style.display = "none";
+      }
+    }
+  }  
+  
+  function temperature_function(){  
+
+    filter_value = document.getElementById("temperature_filter"); 
+
+    for (i = 1; i < document.getElementById('guest_list_table').rows.length ; i++) {
+
+      temperature_value = document.getElementById('guest_list_table').rows[i].cells[4].innerHTML;
+      temperature_value = temperature_value.substring(temperature_value.length-5, temperature_value.length-1)
+      selector_name = filter_value.value;
+
+      if(temperature_value >= selector_name){
+        document.getElementById('guest_list_table').rows[i].cells[4].style.color = "#FF0000"
+        document.getElementById('guest_list_table').rows[i].cells[4].style.fontWeight = "900"
+      }
+      else{
+        document.getElementById('guest_list_table').rows[i].cells[4].style.color = ""
+        document.getElementById('guest_list_table').rows[i].cells[4].style.fontWeight = ""
+      }
+    } 
+  }
+  </script>
+
 </body>
