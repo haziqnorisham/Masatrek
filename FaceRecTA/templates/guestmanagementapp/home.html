@@ -226,6 +226,7 @@
       <div class="col">
       </div>
     </div>
+    {% if request.user.is_superuser %}
     <div class="row">
       <div class="col">
       </div>
@@ -238,6 +239,7 @@
       <div class="col">
       </div>
     </div>
+    {%endif%}
   </div>
   <!-- MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL-->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
