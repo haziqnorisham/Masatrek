@@ -25,7 +25,7 @@
   </div>
   <br>
   <div class="container shadow border rounded p-3 text-center">
-    <p class="h2 text-center"><strong>Guest List</strong></p>
+    <p class="h2 text-center"><strong>Visitor Attendance</strong></p>
     <button type="button" class="btn btn-sm btn-warning" onclick="window.location.href='/guestmanagement/'">Back</button>
   </div>
   <br>
@@ -58,6 +58,20 @@
         </form>
       </div>      
       <div class="col">
+      </div>
+    </div>
+    <div class="row">
+      <div class="container">
+        <hr/>
+      </div>      
+    </div>
+    <div class="row">
+      <div class="col">        
+      </div>
+      <div class="col text-center"> 
+        <button type="button" id="show_btn" onclick="printDiv()" class="btn btn-warning">Print</button>       
+      </div>
+      <div class="col">        
       </div>
     </div>
   </div>
@@ -94,41 +108,61 @@
     </ul>
     {% endif %}
     <div class="row">
-      <div class="col">
-        <table class="table" id="guest_list_table">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">Image</th>
-              <th scope="col">Name</th>
-              <th scope="col">NRIC</th>
-              <th scope="col">Capture Time</th>
-              <th scope="col">Capture Location</th>              
-            </tr>
-          </thead>
-          <tbody>
-            {% for guest in guest_attendance_list %}
-            <tr>
-              <td><img class="shadow rounded img-thumbnail" width="142" height="157" src="{% static guest.img_name %}" alt="myimg"></td>
-              <td>{{guest.name}}</td>
-              <td>{{guest.nric}}</td>
-              <td>{{guest.enter_time}}</td>
-              <td>{{guest.enter_location}}<br>({{guest.enter_temperature}})</td>
-              
-            </tr>
-            {% endfor %}
-          </tbody>
+      <div class="col" id="table_div">
+          <table class="table" id="guest_list_table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Name</th>
+                <th scope="col">NRIC</th>
+                <th scope="col">Capture Time</th>
+                <th scope="col">Capture Location</th>              
+              </tr>
+            </thead>
+            <tbody>
+              {% for guest in guest_attendance_list %}
+              <tr>
+                <td><img class="shadow rounded img-thumbnail" width="142" height="157" src="{% static guest.img_name %}" alt="myimg"></td>
+                <td>{{guest.name}}</td>
+                <td>{{guest.nric}}</td>
+                <td>{{guest.enter_time}}</td>
+                <td>{{guest.enter_location}}<br>({{guest.enter_temperature}})</td>
+                
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>         
       </div>
     </div>
   </div>
 
 <!-- MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL -->
-
+<!-- Hidden Form -->
+<form action="/guestmanagement/guestattendance/print/" method="POST" id="hidden_form">
+  <input type="hidden" id="name_hidden" name="name_hidden" value="0">
+  <input type="hidden" id="nric_hidden" name="nric_hidden" value="0">
+  <input type="hidden" id="temperature_hidden" name="temperature_hidden" value="0">
+  <input type="hidden" id="date_hidden" name="date_hidden" value="0">
+  <input type="hidden" id="table_hidden" name="table_hidden" value="0">
+</form>
+<!-- Hidden Form -->
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 <script>
+  function printDiv(){
+    
+    document.getElementById("name_hidden").value        = document.getElementById("name_filter").value;
+    document.getElementById("nric_hidden").value        = document.getElementById("nric_filter").value;
+    document.getElementById("temperature_hidden").value = document.getElementById("temperature_filter").value;
+    document.getElementById("date_hidden").value        = document.getElementById("date_selector").value;
+    document.getElementById("table_hidden").value       = document.getElementById("table_div").innerHTML;
+    
+    document.getElementById("hidden_form").submit();
+  }
+
   function search_function() {
     // Declare variables
     var input, filter, ul, li, a, i, txtValue, row_list;
