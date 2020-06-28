@@ -32,7 +32,7 @@
     <div class="container">
       <div class="row text-center">
         <div class="col-sm">
-            Organization: <input type="text" name="x">
+            Organization: <input type="text" name="x" id="organization_field">
         </div>
 
         <div class="col-sm">
@@ -175,7 +175,7 @@
     <hr class="style"/>
     </div>
 
-    <div class="container">
+    <div class="container" id="table_array">
 
     {% for date_temp in date_range %}
       <h4 class="bg-secondary"><font color=#ffffff>&nbsp;{{ date_temp.date }}</font></h4>
@@ -228,7 +228,18 @@
 
     <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
   </div>
-
+  <form action="/time_attendance/btnAction/print/" id="hidden_form" method="POST">
+    <input type="hidden" id="organization_hidden" name="organization_hidden" value="0">
+    <input type="hidden" id="department_hidden" name="department_hidden" value="0">   
+    <input type="hidden" id="date_start_hidden" name="date_start_hidden" value="0">
+    <input type="hidden" id="date_end_hidden" name="date_end_hidden" value="0">
+    <input type="hidden" id="hour_start_hidden" name="hour_start_hidden" value="0">
+    <input type="hidden" id="shift_start_hidden" name="shift_start_hidden" value="0">
+    <input type="hidden" id="shift_end_hidden" name="shift_end_hidden" value="0">
+    <input type="hidden" id="employee_name_hidden" name="employee_name_hidden" value="0">
+    <input type="hidden" id="temperature_hidden" name="temperature_hidden" value="0">
+    <input type="hidden" id="table_hidden" name="table_hidden" value="0">
+  </form>
 <script>
 function myFunction(){
 
@@ -366,7 +377,18 @@ function msToTime(duration) {
 }
 
 function printDiv(){
-  window.print()
+  document.getElementById("organization_hidden").value  = document.getElementById("organization_field").value;
+  document.getElementById("department_hidden").value    = document.getElementById("department_filter").value;
+  document.getElementById("date_start_hidden").value    = document.getElementById("date_input").value;
+  document.getElementById("date_end_hidden").value      = document.getElementById("date_input2").value;
+  document.getElementById("hour_start_hidden").value    = document.getElementById("hour_input").value;
+  document.getElementById("shift_start_hidden").value   = document.getElementById("time_input").value;
+  document.getElementById("shift_end_hidden").value     = document.getElementById("time_input2").value;
+  document.getElementById("employee_name_hidden").value = document.getElementById("name_filter").value;
+  document.getElementById("temperature_hidden").value   = document.getElementById("temperature_field").value;
+  document.getElementById("table_hidden").value   = document.getElementById("table_array").innerHTML;
+  
+  document.getElementById("hidden_form").submit();
 }
 
 function date_value(){

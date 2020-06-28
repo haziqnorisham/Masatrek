@@ -255,3 +255,23 @@ def Stranger_view(request):
         print(e)
 
     return render(request, 'timeAttendance/strangerView.html', context)
+
+@csrf_exempt
+@login_required
+def Print_view(request):
+
+    context= {
+            'table': request.POST["table_hidden"],
+            'organization': request.POST["organization_hidden"],
+            'department' : request.POST["department_hidden"],
+            'date_start': request.POST["date_start_hidden"],
+            'date_end':request.POST["date_end_hidden"],
+            'shift_start': request.POST["shift_start_hidden"],
+            'shift_end': request.POST["shift_end_hidden"],
+            'hour_start': request.POST["hour_start_hidden"],
+            'employee_name': request.POST["employee_name_hidden"],
+            'temperature': request.POST["temperature_hidden"]
+            }
+    
+    return render(request, 'timeAttendance/print.html', context)
+    
