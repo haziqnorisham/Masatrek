@@ -672,3 +672,16 @@ def register_guest_proc_home(requests):
             messages.error(requests, 'One or more terminal disconnected, please ensure that all termianl is connected!')
     response = redirect('/guestmanagement/')
     return response
+
+@login_required
+def guest_print(request):
+
+    context= {
+            'table': request.POST["table_hidden"],
+            'name': request.POST["name_hidden"],
+            'nric' : request.POST["nric_hidden"],
+            'temperature': request.POST["temperature_hidden"],
+            'date':request.POST["date_hidden"]
+            }
+    
+    return render(request, 'guestmanagementapp/print.html', context)

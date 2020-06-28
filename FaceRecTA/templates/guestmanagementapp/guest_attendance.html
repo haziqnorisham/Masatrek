@@ -139,6 +139,7 @@
 <!-- MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL MODAL -->
 <!-- Hidden Form -->
 <form action="/guestmanagement/guestattendance/print/" method="POST" id="hidden_form">
+  {% csrf_token %}
   <input type="hidden" id="name_hidden" name="name_hidden" value="0">
   <input type="hidden" id="nric_hidden" name="nric_hidden" value="0">
   <input type="hidden" id="temperature_hidden" name="temperature_hidden" value="0">

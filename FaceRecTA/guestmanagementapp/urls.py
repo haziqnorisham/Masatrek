@@ -9,6 +9,7 @@ urlpatterns = [
     path('register_guest_proc_home/', views.register_guest_proc_home, name='register_guest_proc_home'),
     path('guestlist/guest_list_proc/', views.guest_list_proc, name='guest_list_proc'),
     path('guestattendance', views.guest_attendance, name='guest_attendance'),
+    path('guestattendance/print/', views.guest_print, name='guest_print'),
     path('terminal/', views.terminal, name='terminal'),
     path('ajax_check_new_stranger/', views.ajax_check_new_stranger, name='ajax_check_new_stranger'),
 
