@@ -114,6 +114,7 @@ def index2(request):
     print(response_data['info'])
     print()
     print('PERSON ID = ' + str(response_data['info']['PersonID']))
+    print('IdCard = ' + str(response_data['info']['PersonUUID']))
     print('CUSTOMIZE ID = ' + str(response_data['info']['CustomizeID']))
     print('IdCard = ' + str(response_data['info']['IdCard']))
     print('DEVICE ID = ' + str(response_data['info']['DeviceID']))
@@ -154,7 +155,7 @@ def index2(request):
             else:
                 print("Error! cannot create the database connection.")
 
-            project = [str(response_data['info']['CreateTime']), str(response_data['info']['DeviceID']), int(response_data['info']['IdCard']), str(response_data['info']['Temperature'])]
+            project = [str(response_data['info']['CreateTime']), str(response_data['info']['DeviceID']), int(response_data['info']['PersinUUID']), str(response_data['info']['Temperature'])]
             project_id = insert_entry(conn, project)
 
     print(project_id)

@@ -354,7 +354,7 @@ def employee_add_process(requests):
             check_all_terminal_connection()
             data = requests.POST.copy()
 
-            if(exist_in_any_terminal(int(data.get("Employee_ID")))):
+            if(exist_in_any_terminal(data.get("Employee_ID"))):
                 messages.error(requests, 'User has previosly been registered in one or more of the terminals')
                 raise Exception('User has previosly been registered in one or more of the terminals')
 
@@ -364,8 +364,7 @@ def employee_add_process(requests):
 
                 emp = EmployeeDetail()
                 emp.name = data.get("Name")
-                #Employee ID must be an integer value
-                emp.id = int(data.get("Employee_ID"))
+                emp.id = data.get("Employee_ID")
 
                 #this actually the gender checking 0 for male 1 for female
                 if (data.get("Employee") == "0"):
@@ -420,13 +419,11 @@ def employee_add_process(requests):
                                     "operator": "AddPerson",
                                     "info": {
                                         "DeviceID":int(terminal_details_object.terminal_id),
-                                        "IdType":0,
+                                        "IdType":2,
                                         "PersonType": 0,
                                         "Name":str(emp.name),
-                                        "Gender":emp.gender,
-                                        "CardType":0,
-                                        "IdCard":str(emp.id),
-                                        "CustomizeID":emp.id,
+                                        "Gender":emp.gender,                                                                                                                      
+                                        "PersonUUID":emp.id, 
                                         "Native": "",
                                         "Tempvalid": 0,
                                         " ChannelAuthority0":"1",
@@ -623,8 +620,8 @@ def employee_delete_process(requests):
                                 "info": {
                                     "DeviceID": int(terminal_detail.terminal_id),
                                     "TotalNum": 1,
-                                    "IdType": 0,
-                                    "CustomizeID": [int(temp_emp.id)],
+                                    "IdType": 2,
+                                    "PersonUUID": [temp_emp.id]
                                     }
                                 }
 

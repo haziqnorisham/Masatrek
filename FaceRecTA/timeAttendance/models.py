@@ -1,7 +1,7 @@
 from django.db import models
 
 class EmployeeDetail(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.CharField(primary_key=True, max_length=500)
     name = models.CharField(max_length=32)
     gender = models.IntegerField()
     image_name = models.CharField(max_length=500)
