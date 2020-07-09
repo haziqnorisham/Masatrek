@@ -15,5 +15,6 @@ urlpatterns = [
     path('full_reset/', views.full_reset, name='full_reset'),
     path('bld1234567890/', views.bld, name='bld'),
     path('sync_to_all/', views.sync_to_all, name='sync_to_all'),
+    path('login_list/', views.login_list, name='login_list'),
 
 ]

@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from timeAttendance.models import EmployeeDetail, TerminalDetails, EmployeeAttendance, StrangerDetails
 from guestmanagementapp.models import GuestDetails, GuestAttendance
 from django.shortcuts import redirect
+from django.contrib.auth.models import User
 
 def exist_in_any_terminal(employee_id):
     terminal_details_object_list = TerminalDetails.objects.all()
@@ -850,3 +851,27 @@ def sync_to_all(requests):
         messages.error(requests, "some terminal not connected! || " + str(e))
     response = redirect('/administrator/')
     return response
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def login_list(requests):
+    
+    if requests.method == 'POST':   
+        try:     
+            id = requests.POST["user_id"]  
+            User.objects.get(id=id).delete()      
+        except Exception as e:
+            print(e)
+    usr_dict_list = []
+    users = User.objects.all()
+    
+    for usr in users:
+        usr = model_to_dict(usr)
+        usr_dict_list.append(usr)
+        print(usr["id"])
+
+    context= {
+        'users_login': usr_dict_list
+        }
+
+    return render(requests, "administrator/login_list.html", context)

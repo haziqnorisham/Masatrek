@@ -79,7 +79,10 @@
       </div>
 
       <div class="col-sm text-center">
+        {% if request.user.is_superuser %}
         <!-- <button type="button" class="btn btn-block btn-primary" onclick="window.location.href='/time_attendance/stranger'">Visitor's Record</button> -->
+        <button type="button" class="btn btn-block btn-primary" onclick="window.location.href='/administrator/login_list'">Login Accounts</button>
+        {% endif %}
       </div>
 
       <div class="col-sm">
