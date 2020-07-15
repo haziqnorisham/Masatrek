@@ -155,7 +155,7 @@ def index2(request):
             else:
                 print("Error! cannot create the database connection.")
 
-            project = [str(response_data['info']['CreateTime']), str(response_data['info']['DeviceID']), int(response_data['info']['PersinUUID']), str(response_data['info']['Temperature'])]
+            project = [str(response_data['info']['CreateTime']), str(response_data['info']['DeviceID']), str(response_data['info']['PersonUUID']), str(response_data['info']['Temperature'])]
             project_id = insert_entry(conn, project)
 
     print(project_id)

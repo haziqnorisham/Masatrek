@@ -820,7 +820,7 @@ def sync_to_all(requests):
                                         "PersonType": 0,
                                         "Name":str(employee.name),
                                         "Gender":employee.gender,
-                                        "personUUID":str(employee.id),
+                                        "PersonUUID":employee.id,
                                         "Native": "",
                                         "Tempvalid": 0,
                                         " ChannelAuthority0":"1",
